@@ -1,0 +1,41 @@
+{
+  "name": "dinjector",
+  "version": "0.0.1",
+  "description": "Dependency injection for javascript",
+  "main": "dist/dinjector/index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "author": {
+    "name": "Mariano Cortesi",
+    "email": "mariano@zauberlabs.com",
+    "url": "https://github.com/mcortesi"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mcortesi/dinjector.git"
+  },
+  "keywords": [
+    "dependency injection",
+    "di",
+    "dependency"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "babel": "^4.0.1",
+    "chai": "^1.10.0",
+    "chai-as-promised": "^4.1.1",
+    "grunt": "^0.4.5",
+    "grunt-babel": "^4.0.0",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-mocha-test": "^0.12.7",
+    "jit-grunt": "^0.9.0",
+    "mocha": "^2.1.0",
+    "sinon": "^1.12.2",
+    "sinon-chai": "^2.6.0"
+  },
+  "dependencies": {
+    "immutable": "^3.6.2",
+    "lodash": "^3.0.1"
+  }
+}
