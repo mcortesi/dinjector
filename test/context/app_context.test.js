@@ -4,8 +4,9 @@ var Immutable = require('immutable');
 var path = require('path');
 
 var { expect } = require('../test_commons');
-var {SingletonType, FunctionType} = require('../../lib/types');
+var {SingletonType, FunctionType, InlineType, ModuleType} = require('../../lib/types');
 var { ValidationError, InvalidTypeError, InvalidArguments } = require('../../lib/errors');
+var resolvers = require('../../lib/argument_resolvers');
 var AppContext = require('../../lib/context/app_context');
 
 var requirePrefix = path.resolve(path.join(__dirname, "../.."));
@@ -13,7 +14,18 @@ var requirePrefix = path.resolve(path.join(__dirname, "../.."));
 describe("AppContext", function() {
   var knownTypes = [
     new SingletonType(requirePrefix),
-    new FunctionType(requirePrefix)
+    new FunctionType(requirePrefix),
+    new ModuleType(),
+    new InlineType()
+  ];
+
+  var baseResolvers = [
+    resolvers.arrayResolver,
+    resolvers.objectResolver,
+    resolvers.stringResolver,
+    resolvers.numberResolver,
+    resolvers.booleanResolver,
+    resolvers.propertyResolver
   ];
 
   describe("new AppContext()", function() {
@@ -63,17 +75,48 @@ describe("AppContext", function() {
 
   describe("#get()", function() {
 
-    it.skip('return the created object using the Mapping specification', function() {
 
+    it('return the created object using the Mapping specification', function() {
+      var mappings = {
+        sumOfValues: {
+          type: 'inline',
+          arguments: ['config:valueA', 'config:valueB', 10],
+          createFn(a, b, c) {
+            return a + b + c;
+          }
+        },
+        config: {
+          type: 'inline',
+          createFn() {
+            return {
+              valueA: 5,
+              valueB: 15
+            };
+          }
+        }
+      };
+      var ctx = new AppContext(mappings, knownTypes, baseResolvers);
+      expect(ctx.get('sumOfValues')).to.eq(30);
     });
 
-    it.skip('cache the object if the mapping specifies so', function() {
-
+    it('cache the object if the mapping specifies so', function() {
+      var nextValue = 0;
+      var mappings = {
+        getAndIncrement: {
+          type: 'inline',
+          cache: true,
+          createFn() {
+            nextValue +=1;
+            return nextValue;
+          }
+        }
+      };
+      var ctx = new AppContext(mappings, knownTypes, baseResolvers);
+      expect(ctx.get('getAndIncrement')).to.eq(1);
+      expect(ctx.get('getAndIncrement')).to.eq(1);
+      expect(ctx.get('getAndIncrement')).to.eq(1);
     });
 
-    it.skip('resolve Mapping arguments to other mappings', function() {
-
-    });
   });
 });
 
