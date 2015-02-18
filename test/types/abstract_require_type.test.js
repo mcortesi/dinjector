@@ -19,13 +19,13 @@ describe('AbstractRequireType', function() {
   describe('#validate()', function() {
 
     it('should check as invalid if path is missing', function () {
-      var validationResult = mappingType.validate(Immutable.Map({type: 'dummy'}));
+      var validationResult = mappingType.validate(Immutable.Map({type: 'dummy', name: 'name'}));
       expect(validationResult.isValid()).to.be.false();
       expect(validationResult.missingKeys.equals(Immutable.Set.of('path'))).to.be.true();
     });
 
     it('should check valid if optional \'property\' key is used', function () {
-      var validationResult = mappingType.validate(Immutable.Map({path: 'apath', property: 'prop', type: 'dummy'}));
+      var validationResult = mappingType.validate(Immutable.Map({path: 'apath', property: 'prop', type: 'dummy', name: 'name'}));
       expect(validationResult.isValid()).to.be.true();
       expect(validationResult.extraKeys.isEmpty()).to.be.true();
     });
