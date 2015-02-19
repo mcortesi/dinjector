@@ -1,6 +1,6 @@
 {
   "name": "dinjector",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Dependency injection for javascript",
   "main": "dist/dinjector/index.js",
   "scripts": {
