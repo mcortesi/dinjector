@@ -73,9 +73,10 @@ describe("TestContext", function() {
       expect(ctx.get('getAndIncrement')).to.eq(5);
     });
 
-    it('should fail to set an unexistent mapping', function() {
+    it('should allow to set an unexistent mapping', function() {
       var ctx = new TestContext({}, knownTypes, baseResolvers);
-      expect( () => ctx.set('dummy', 5)).to.throw(Error);
+      ctx.set('dummy', 5);
+      expect(ctx.get('dummy')).to.eq(5);
     });
   });
 });
