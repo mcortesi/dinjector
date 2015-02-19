@@ -5,6 +5,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) { if (st
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 var Immutable = require("immutable");
+var _ = require("lodash");
 
 var ValidationResult = require("../validation_result");
 
@@ -90,7 +91,12 @@ var AbstractType = (function () {
       value: function createObject(mapping, resolveArgument) {
         var objectCreator = this._resolveObjectCreator(mapping);
         var args = this._resolveArguments(mapping, resolveArgument);
-        return this._doCreateObject(objectCreator, args, mapping);
+        var createdObject = this._doCreateObject(objectCreator, args, mapping);
+        if (_.isObject(createdObject) && !_.isArray(createdObject)) {
+          createdObject.__contextKey = mapping.get("name");
+        }
+
+        return createdObject;
       },
       writable: true,
       configurable: true

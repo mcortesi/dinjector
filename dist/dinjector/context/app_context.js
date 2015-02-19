@@ -135,11 +135,11 @@ var AppContext = (function () {
     get: {
       value: function get(key) {
         var _this = this;
-        if (this.mappings.has(key)) {
-          var mapping = this.mappings.get(key);
-          if (this.cache.has(key)) {
-            return this.cache.get(key);
-          } else {
+        if (this.cache.has(key)) {
+          return this.cache.get(key);
+        } else {
+          if (this.mappings.has(key)) {
+            var mapping = this.mappings.get(key);
             var mappingType = this._getTypeFor(mapping);
             var mappedObj = mappingType.createObject(mapping, function (k) {
               return _this.resolver.resolve(k);
@@ -150,9 +150,9 @@ var AppContext = (function () {
             }
 
             return mappedObj;
+          } else {
+            throw new Error("Configuration for " + key + " is not defined");
           }
-        } else {
-          throw new Error("Configuration for " + key + " is not defined");
         }
       },
       writable: true,

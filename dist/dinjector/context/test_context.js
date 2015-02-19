@@ -30,18 +30,22 @@ var TestContext = (function (AppContext) {
   _prototypeProperties(TestContext, null, {
     reset: {
       value: function reset() {
+        var _this = this;
+        var whiteList = arguments[0] === undefined ? [] : arguments[0];
+        var oldCache = this.cache;
         this.cache = Immutable.Map();
+        whiteList.forEach(function (key) {
+          if (oldCache.has(key)) {
+            _this.cache = _this.cache.set(key, oldCache.get(key));
+          }
+        });
       },
       writable: true,
       configurable: true
     },
     set: {
       value: function set(key, object) {
-        if (this.mappings.has(key)) {
-          this.cache = this.cache.set(key, object);
-        } else {
-          throw new Error("Configuration for " + key + " is not defined");
-        }
+        this.cache = this.cache.set(key, object);
       },
       writable: true,
       configurable: true

@@ -10,6 +10,7 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 var Immutable = require("immutable");
 var AbstractType = require("./abstract_type");
+var _ = require("lodash");
 
 /**
  * Abstract Mapping type with require() support.
@@ -45,7 +46,7 @@ var AbstractRequireType = (function (AbstractType) {
         var keyObject;
 
         var requirePath;
-        if (mapping.get("path").startsWith("/")) {
+        if (_.startsWith(mapping.get("path"), "/")) {
           requirePath = this.basePath + mapping.get("path");
         } else {
           requirePath = mapping.get("path");
