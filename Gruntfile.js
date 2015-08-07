@@ -23,16 +23,16 @@ module.exports = function(grunt) {
       },
       src: ['test/**/*.test.js']
     },
-    jshint: {
+    eslint: {
       test: {
         options: {
-          jshintrc: 'test/.jshintrc'
+          configFile: '.eslintrc'
         },
         src: ['test/**/*.js']
       },
       lib: {
         options: {
-          jshintrc: '.jshintrc'
+          configFile: '.eslintrc'
         },
         src: ['lib/**/*.js']
       }
@@ -43,7 +43,8 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('test', ['jshint', 'mochaTest']);
+  grunt.registerTask('lint', 'eslint');
+  grunt.registerTask('test', ['eslint', 'mochaTest']);
   grunt.registerTask('build', ['babel:dist']);
 
   grunt.registerTask('default', ['test', 'build']);

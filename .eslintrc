@@ -1,0 +1,29 @@
+env:
+  es6: true
+  node: true
+ecmaFeatures:
+  modules: true
+rules:
+  indent:
+    - 2
+    - 2
+  linebreak-style:
+    - 2
+    - unix
+  semi:
+    - 2
+    - always
+  no-unused-vars:
+    - 1
+    -
+      args: none #sometimes they callers 'checks' how many args you receive (ie. express middlewares)
+  no-multi-spaces:
+    - 1
+    -
+      exceptions:
+        Property: true
+  no-underscore-dangle: 0
+  quotes: 0
+  new-cap: 0
+  key-spacing: 0
+  camelcase: 0
