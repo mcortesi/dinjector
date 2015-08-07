@@ -89,14 +89,20 @@ var AbstractType = (function () {
        * @return {*} created object
        */
       value: function createObject(mapping, resolveArgument) {
-        var objectCreator = this._resolveObjectCreator(mapping);
-        var args = this._resolveArguments(mapping, resolveArgument);
-        var createdObject = this._doCreateObject(objectCreator, args, mapping);
-        if (_.isObject(createdObject) && !_.isArray(createdObject)) {
-          createdObject.__contextKey = mapping.get("name");
-        }
+        try {
+          var objectCreator = this._resolveObjectCreator(mapping);
+          var args = this._resolveArguments(mapping, resolveArgument);
+          var createdObject = this._doCreateObject(objectCreator, args, mapping);
+          if (_.isObject(createdObject) && !_.isArray(createdObject)) {
+            createdObject.__contextKey = mapping.get("name");
+          }
 
-        return createdObject;
+          return createdObject;
+        } catch (error) {
+          console.error("Error while resolving mapping: " + mapping.name);
+          console.error(error);
+          throw error;
+        }
       },
       writable: true,
       configurable: true

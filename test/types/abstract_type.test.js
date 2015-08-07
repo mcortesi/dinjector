@@ -17,30 +17,30 @@ describe('AbstractType', function() {
 
     it('should check as valid when only all required keys are defined', function () {
       var validationResult = mappingType.validate(Immutable.Map({req1: 1, req2: 2, type: 'dummy', name: 'name'}));
-      expect(validationResult.isValid()).to.be.true();
-      expect(validationResult.missingKeys.isEmpty()).to.be.true();
-      expect(validationResult.extraKeys.isEmpty()).to.be.true();
+      expect(validationResult.isValid()).to.be.true;
+      expect(validationResult.missingKeys.isEmpty()).to.be.true;
+      expect(validationResult.extraKeys.isEmpty()).to.be.true;
     });
 
     it('should check as invalid when missing a required key', function () {
       var validationResult = mappingType.validate(Immutable.Map({req1: 1, type: 'dummy', name: 'name'}));
-      expect(validationResult.isValid()).to.be.false();
-      expect(validationResult.extraKeys.isEmpty()).to.be.true();
-      expect(validationResult.missingKeys.equals(Immutable.Set.of('req2'))).to.be.true();
+      expect(validationResult.isValid()).to.be.false;
+      expect(validationResult.extraKeys.isEmpty()).to.be.true;
+      expect(validationResult.missingKeys.equals(Immutable.Set.of('req2'))).to.be.true;
     });
 
     it('should check as invalid when exists keys not in possibleKeys', function () {
       var validationResult = mappingType.validate(Immutable.Map({req1: 1, req2: 2, type: 'dummy', name: 'name', extra: 1}));
-      expect(validationResult.isValid()).to.be.false();
-      expect(validationResult.missingKeys.isEmpty()).to.be.true();
-      expect(validationResult.extraKeys.equals(Immutable.Set.of('extra'))).to.be.true();
+      expect(validationResult.isValid()).to.be.false;
+      expect(validationResult.missingKeys.isEmpty()).to.be.true;
+      expect(validationResult.extraKeys.equals(Immutable.Set.of('extra'))).to.be.true;
     });
 
     it('should check as valid when using required key + optional ones', function () {
       var validationResult = mappingType.validate(Immutable.Map({req1: 1, req2: 2, opt1:2, opt2: 3, type: 'dummy', name: 'name'}));
-      expect(validationResult.isValid()).to.be.true();
-      expect(validationResult.missingKeys.isEmpty()).to.be.true();
-      expect(validationResult.extraKeys.isEmpty()).to.be.true();
+      expect(validationResult.isValid()).to.be.true;
+      expect(validationResult.missingKeys.isEmpty()).to.be.true;
+      expect(validationResult.extraKeys.isEmpty()).to.be.true;
     });
 
   });
@@ -65,7 +65,7 @@ describe('AbstractType', function() {
     it('should NOT set default values when a value exists for them', function () {
       var oldMapping = Immutable.Map({req1: 1, req2: 2, type: 'dummy', cache: true, arguments: [1,2,3], opt1: 3});
       var newMapping = mappingType.preprocess(oldMapping);
-      expect(newMapping.equals(oldMapping)).to.be.true();
+      expect(newMapping.equals(oldMapping)).to.be.true;
     });
 
   });
