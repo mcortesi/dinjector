@@ -1,6 +1,6 @@
 'use strict';
 
-var Immutable = require('immutable');
+import Immutable from 'immutable';
 var path = require('path');
 
 var { expect } = require('../test_commons');

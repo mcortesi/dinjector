@@ -1,13 +1,9 @@
-'use strict';
+import chai from 'chai';
+import path from 'path';
+import * as injector from '../lib';
 
-var chai = require('chai');
-var expect = chai.expect;
-
-var path = require('path');
-
-var injector = require('../lib');
-
-var requirePrefix = path.resolve(path.join(__dirname, ".."));
+const expect = chai.expect;
+const requirePrefix = path.resolve(path.join(__dirname, ".."));
 
 describe('Injector', function() {
 

@@ -1,7 +1,7 @@
 'use strict';
 /*jshint -W030 */
 
-var Immutable = require('immutable');
+import Immutable from 'immutable';
 
 var { expect, sinon } = require('../test_commons');
 var AbstractType = require('../../lib/types/abstract_type');

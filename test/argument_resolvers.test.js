@@ -1,11 +1,5 @@
-'use strict';
-/*jshint -W030 */
-
-var Immutable = require('immutable');
-var path = require('path');
-
-var { expect, sinon } = require('./test_commons');
-var resolvers = require('../lib/argument_resolvers');
+import { expect, sinon } from './test_commons';
+import * as resolvers from '../lib/argument_resolvers';
 
 describe('Argument Resolvers', function() {
   var fail = x => { throw new Error(); };

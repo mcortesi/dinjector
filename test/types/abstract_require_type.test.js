@@ -1,7 +1,7 @@
 'use strict';
 /*jshint -W030 */
 
-var Immutable = require('immutable');
+import Immutable from 'immutable';
 var path = require('path');
 
 var { expect, sinon } = require('../test_commons');

@@ -44,7 +44,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('lint', 'eslint');
-  grunt.registerTask('test', ['eslint', 'mochaTest']);
+  grunt.registerTask('test', ['lint', 'mochaTest']);
   grunt.registerTask('build', ['babel:dist']);
 
   grunt.registerTask('default', ['test', 'build']);

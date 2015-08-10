@@ -9,7 +9,7 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 var Immutable = require("immutable");
-var AbstractRequireType = require("./abstract_require_type");
+import AbstractRequireType from './abstract_require_type';
 
 /**
  * Module Mapping Type
