@@ -118,5 +118,61 @@ describe("AppContext", function() {
     });
 
   });
-});
 
+  describe.only("#getWithTags()", function() {
+
+
+    it('return objects with matching tags', function() {
+      var mappings = {
+        one: {
+          type: 'inline',
+          tags: ['number'],
+          arguments: [],
+          createFn() { return 1; }
+        },
+        two: {
+          type: 'inline',
+          tags: ['number'],
+          arguments: [],
+          createFn() { return 2; }
+        },
+        three: {
+          type: 'inline',
+          tags: ['number'],
+          arguments: [],
+          createFn() { return 3; }
+        },
+      };
+      var ctx = new AppContext(mappings, knownTypes, baseResolvers);
+
+      expect(ctx.getWithTags('number')).to.eql([1,2,3]);
+    });
+
+    it('return objects that match ALL tags', function() {
+      var mappings = {
+        one: {
+          type: 'inline',
+          tags: ['number', 'a'],
+          arguments: [],
+          createFn() { return 1; }
+        },
+        two: {
+          type: 'inline',
+          tags: ['number'],
+          arguments: [],
+          createFn() { return 2; }
+        },
+        three: {
+          type: 'inline',
+          tags: ['number', 'a'],
+          arguments: [],
+          createFn() { return 3; }
+        },
+      };
+      var ctx = new AppContext(mappings, knownTypes, baseResolvers);
+
+      expect(ctx.getWithTags('number', 'a')).to.eql([1,3]);
+    });
+
+  });
+});
