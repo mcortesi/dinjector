@@ -1,13 +1,22 @@
-"use strict";
+'use strict';
 
-var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var Immutable = require("immutable");
-var _ = require("lodash");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var ValidationResult = require("../validation_result");
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _validation_result = require("../validation_result");
+
+var _validation_result2 = _interopRequireDefault(_validation_result);
 
 /**
  * @callback AbstractType~argumentsResolver
@@ -32,132 +41,121 @@ var ValidationResult = require("../validation_result");
  * @member {Immutable.Set.<string>} possibleKeys - The set of possible keys
  * @member {Immutable.Map.<string, object>} defaultValues - A map with default values for Mappings
  */
+
 var AbstractType = (function () {
   function AbstractType(name) {
-    var requiredKeys = arguments[1] === undefined ? [] : arguments[1];
-    var optionalKeys = arguments[2] === undefined ? [] : arguments[2];
-    var defaultValues = arguments[3] === undefined ? {} : arguments[3];
+    var requiredKeys = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+    var optionalKeys = arguments.length <= 2 || arguments[2] === undefined ? [] : arguments[2];
+    var defaultValues = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
+
     _classCallCheck(this, AbstractType);
 
     this.name = name;
-    this.requiredKeys = Immutable.Set.of("type", "name").union(requiredKeys);
-    this.optionalKeys = Immutable.Set.of("cache", "arguments").union(optionalKeys);
-    this.defaultValues = Immutable.Map({ cache: false, arguments: [] }).merge(defaultValues);
+    this.requiredKeys = _immutable2['default'].Set.of('type', 'name').union(requiredKeys);
+    this.optionalKeys = _immutable2['default'].Set.of('cache', 'arguments', 'tags').union(optionalKeys);
+    this.defaultValues = _immutable2['default'].Map({ cache: false, arguments: [] }).merge(defaultValues);
     this.possibleKeys = this.requiredKeys.union(this.optionalKeys);
   }
 
-  _prototypeProperties(AbstractType, null, {
-    validate: {
+  /**
+   * Validates a Mapping.
+   *
+   * @param {Immutable.Map} mapping - Object mapping to validate
+   * @return {ValidationResult} the result of the validation
+   */
 
-      /**
-       * Validates a Mapping.
-       *
-       * @param {Immutable.Map} mapping - Object mapping to validate
-       * @return {ValidationResult} the result of the validation
-       */
-      value: function validate(mapping) {
-        var mappingKeys = mapping.keySeq().toSet();
-        var extraKeys = mappingKeys.subtract(this.possibleKeys);
-        var missingKeys = this.requiredKeys.subtract(mappingKeys);
+  _createClass(AbstractType, [{
+    key: 'validate',
+    value: function validate(mapping) {
+      var mappingKeys = mapping.keySeq().toSet();
+      var extraKeys = mappingKeys.subtract(this.possibleKeys);
+      var missingKeys = this.requiredKeys.subtract(mappingKeys);
 
-        return new ValidationResult(mapping, extraKeys, missingKeys);
-      },
-      writable: true,
-      configurable: true
-    },
-    preprocess: {
-
-      /**
-       * Preprocess a Mapping
-       *
-       * @params {Immutable.Map} mapping - Object mapping to preprocess
-       * @return {Immutable.Map} preprocessed mapping
-       */
-      value: function preprocess(mapping) {
-        return this.defaultValues.merge(mapping);
-      },
-      writable: true,
-      configurable: true
-    },
-    createObject: {
-
-      /**
-       * Creates an object using Mapping instructions
-       *
-       * @params {Immutable.Map} mapping - Object mapping to preprocess
-       * @param {AbstractType~argumentsResolver} argumentsResolver - function to resolve arguments (dependencies)
-       * @return {*} created object
-       */
-      value: function createObject(mapping, resolveArgument) {
-        try {
-          var objectCreator = this._resolveObjectCreator(mapping);
-          var args = this._resolveArguments(mapping, resolveArgument);
-          var createdObject = this._doCreateObject(objectCreator, args, mapping);
-          if (_.isObject(createdObject) && !_.isArray(createdObject)) {
-            createdObject.__contextKey = mapping.get("name");
-          }
-
-          return createdObject;
-        } catch (error) {
-          console.error("Error while resolving mapping: " + mapping.name);
-          console.error(error);
-          throw error;
-        }
-      },
-      writable: true,
-      configurable: true
-    },
-    _resolveArguments: {
-
-      /**
-       * Given a Mapping, resolve it's arguments using the configured argumentsResolver
-       *
-       * @instance
-       * @params {Immutable.Map} mapping - Object mapping
-       * @param {AbstractType~argumentsResolver} argumentsResolver - function to resolve arguments (dependencies)
-       * @return {Array} the resolved arguments
-       */
-      value: function _resolveArguments(mapping, resolveArgument) {
-        return mapping.get("arguments").map(resolveArgument);
-      },
-      writable: true,
-      configurable: true
-    },
-    _resolveObjectCreator: {
-
-      /**
-       * Given a Mapping, it returns the object|function|any to be used to create the final object.
-       *
-       * @instance
-       * @abstract
-       * @params {Immutable.Map} mapping - Object mapping
-       * @return {*} something to be used to create the final object (typically an Object or Function)
-       */
-      value: function _resolveObjectCreator(mapping) {
-        throw new Error("abstract method: unimplemented");
-      },
-      writable: true,
-      configurable: true
-    },
-    _doCreateObject: {
-
-      /**
-       * Given the object creator and the resolved arguments, creates the final object.
-       *
-       * @instance
-       * @abstract
-       * @params {*} objectCreator - what's to be used to create the final object
-       * @params {Array} args - array of resolved arguments
-       * @params {Immutable.Map} mapping - Object mapping
-       * @return {*} the created object
-       */
-      value: function _doCreateObject(objectCreator, args, mapping) {
-        throw new Error("abstract method: unimplemented");
-      },
-      writable: true,
-      configurable: true
+      return new _validation_result2['default'](mapping, extraKeys, missingKeys);
     }
-  });
+
+    /**
+     * Preprocess a Mapping
+     *
+     * @params {Immutable.Map} mapping - Object mapping to preprocess
+     * @return {Immutable.Map} preprocessed mapping
+     */
+  }, {
+    key: 'preprocess',
+    value: function preprocess(mapping) {
+      return this.defaultValues.merge(mapping);
+    }
+
+    /**
+     * Creates an object using Mapping instructions
+     *
+     * @params {Immutable.Map} mapping - Object mapping to preprocess
+     * @param {AbstractType~argumentsResolver} argumentsResolver - function to resolve arguments (dependencies)
+     * @return {*} created object
+     */
+  }, {
+    key: 'createObject',
+    value: function createObject(mapping, resolveArgument) {
+      try {
+        var objectCreator = this._resolveObjectCreator(mapping);
+        var args = this._resolveArguments(mapping, resolveArgument);
+        var createdObject = this._doCreateObject(objectCreator, args, mapping);
+        if (_lodash2['default'].isObject(createdObject) && !_lodash2['default'].isArray(createdObject)) {
+          createdObject.__contextKey = mapping.get('name');
+        }
+
+        return createdObject;
+      } catch (error) {
+        console.error('Error while resolving mapping: ' + mapping.name);
+        console.error(error);
+        throw error;
+      }
+    }
+
+    /**
+     * Given a Mapping, resolve it's arguments using the configured argumentsResolver
+     *
+     * @instance
+     * @params {Immutable.Map} mapping - Object mapping
+     * @param {AbstractType~argumentsResolver} argumentsResolver - function to resolve arguments (dependencies)
+     * @return {Array} the resolved arguments
+     */
+  }, {
+    key: '_resolveArguments',
+    value: function _resolveArguments(mapping, resolveArgument) {
+      return mapping.get('arguments').map(resolveArgument);
+    }
+
+    /**
+     * Given a Mapping, it returns the object|function|any to be used to create the final object.
+     *
+     * @instance
+     * @abstract
+     * @params {Immutable.Map} mapping - Object mapping
+     * @return {*} something to be used to create the final object (typically an Object or Function)
+     */
+  }, {
+    key: '_resolveObjectCreator',
+    value: function _resolveObjectCreator(mapping) {
+      throw new Error('abstract method: unimplemented');
+    }
+
+    /**
+     * Given the object creator and the resolved arguments, creates the final object.
+     *
+     * @instance
+     * @abstract
+     * @params {*} objectCreator - what's to be used to create the final object
+     * @params {Array} args - array of resolved arguments
+     * @params {Immutable.Map} mapping - Object mapping
+     * @return {*} the created object
+     */
+  }, {
+    key: '_doCreateObject',
+    value: function _doCreateObject(objectCreator, args, mapping) {
+      throw new Error('abstract method: unimplemented');
+    }
+  }]);
 
   return AbstractType;
 })();

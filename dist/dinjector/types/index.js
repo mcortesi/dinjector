@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 
 module.exports = {
-  SingletonType: require("./singleton_type"),
-  FunctionType: require("./function_type"),
-  InlineType: require("./inline_type"),
-  ModuleType: require("./module_type"),
-  AbstractType: require("./abstract_type"),
-  AbstractRequireType: require("./abstract_require_type")
+  SingletonType: require('./singleton_type'),
+  FunctionType: require('./function_type'),
+  InlineType: require('./inline_type'),
+  ModuleType: require('./module_type'),
+  AbstractType: require('./abstract_type'),
+  AbstractRequireType: require('./abstract_require_type')
 };
